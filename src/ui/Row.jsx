@@ -16,7 +16,9 @@ ${(props) =>
     flex-direction: column;
     gap: 1rem;
   `}
-  
 `;
+Row.defaultProps = {
+  type: "vertical",
+};
 
 export default Row;
