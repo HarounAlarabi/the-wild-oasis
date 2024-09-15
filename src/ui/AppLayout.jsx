@@ -15,6 +15,7 @@ const Main = styled.main`
   background-color: #ce6060;
   padding: 2rem;
   background-color: var(--color-grey-50);
+  overflow: scroll;
 `;
 const Container = styled.div`
   max-width: 120rem;
