@@ -1,7 +1,6 @@
 import supabase, { supabaseUrl } from "./supabase";
 export async function getCabins() {
   let { data, error } = await supabase.from("cabins").select("*");
-  console.log("data", data);
   if (error) {
     throw new Error("An error occurred while fetching cabins");
   }
@@ -17,7 +16,6 @@ export async function deleteCabin(id) {
 }
 
 export async function createEditCabin(newCabin, id) {
-  console.log("newCabin", newCabin, id);
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/ ",
@@ -41,6 +39,7 @@ export async function createEditCabin(newCabin, id) {
     throw new Error("Can't insert cabin");
   }
   //upload images
+  if (hasImagePath) return data;
   const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageName, newCabin.image);
