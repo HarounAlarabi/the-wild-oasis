@@ -8,9 +8,9 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 
 import { useCreateCabin } from "./useCreateCabin";
-import { useEditCabin } from "./useEditCabin";
+import { useEditCabin } from "./useUpdateCabin";
 
-function CreateEditCabinForm({ cabinToEdit = {} }) {
+function CreateEditCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { isEditing, editCabin } = useEditCabin();
 
@@ -37,6 +37,7 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -46,6 +47,7 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -54,12 +56,12 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
     console.log(errors);
   };
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit, onError)} type="modal">
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
-          disabled={isCreating}
+          disabled={isSubmitting}
           {...register("name", {
             required: "This field is required",
             min: {
@@ -73,7 +75,7 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
       <FormRow label="Maximum Capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
-          disabled={isCreating}
+          disabled={isSubmitting}
           id="maxCapacity"
           {...register("maxCapacity", {
             required: "This field is required",
@@ -118,7 +120,6 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
 
       <FormRow
         label="Description for website"
-        disabled={isCreating}
         error={errors?.description?.message}
       >
         <Textarea
@@ -142,7 +143,11 @@ function CreateEditCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isSubmitting}>

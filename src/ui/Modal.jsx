@@ -1,4 +1,9 @@
+import { cloneElement, createContext } from "react";
+import { useCloseOut } from "../hooks/useCloseOut";
+import { createPortal } from "react-dom";
+import { HiX } from "react-icons/hi";
 import styled from "styled-components";
+import { useState, useContext } from "react";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -42,9 +47,50 @@ const Button = styled.button`
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    /* Sometimes we need both */
-    /* fill: var(--color-grey-500);
-    stroke: var(--color-grey-500); */
     color: var(--color-grey-500);
   }
 `;
+
+const ModalContext = createContext();
+
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+
+  const close = () => setOpenName("");
+  const open = setOpenName;
+
+  return (
+    <ModalContext.Provider value={{ open, close, openName }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function Open({ children, open: openWindow }) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(openWindow) });
+}
+
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+  const ref = useCloseOut(close);
+
+  if (name !== openName) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal ref={ref}>
+        <Button onClick={close}>
+          <HiX />
+        </Button>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+Modal.Open = Open;
+Modal.Window = Window;
+
+export default Modal;
