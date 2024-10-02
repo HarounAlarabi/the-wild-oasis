@@ -3,8 +3,10 @@ import CabinRow from "./CabinRow";
 import { useFetchCabin } from "./useFetchCabin";
 import Table from "../../ui/Table";
 import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
 function CabinTable() {
   const { cabins, isLoading } = useFetchCabin();
+  //let cabins = [];
   console.log(cabins);
   const [searchParam] = useSearchParams("");
   if (isLoading) return <Spinner />;
@@ -23,6 +25,7 @@ function CabinTable() {
   const sortCabins = filteredCabins.sort(
     (a, b) => [a[field] - b[field]] * modifier
   );
+  if (!cabins.length) return <Empty resourceName="Cabins" />;
   return (
     <Table columns=" 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
       <Table.Header>

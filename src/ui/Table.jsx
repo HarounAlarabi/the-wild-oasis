@@ -88,7 +88,6 @@ function Row({ children }) {
   );
 }
 function Body({ data, render }) {
-  console.log(data);
   return <StyledBody role="rowgroup">{data.map(render)}</StyledBody>;
 }
 // function Footer({ children }) {
