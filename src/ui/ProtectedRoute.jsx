@@ -28,8 +28,9 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  if (isAuthenticated) return children;
-
+  if (isAuthenticated) {
+    return children;
+  }
   return null;
 }
 

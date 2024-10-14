@@ -6,8 +6,6 @@ import { useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
 function CabinTable() {
   const { cabins, isLoading } = useFetchCabin();
-  //let cabins = [];
-  console.log(cabins);
   const [searchParam] = useSearchParams("");
   if (isLoading) return <Spinner />;
   //Filter cabins based on discount
