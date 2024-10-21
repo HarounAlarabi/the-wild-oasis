@@ -9,10 +9,10 @@ import Pagination from "../../ui/Pagination";
 function BookingTable() {
   const { isLoading, bookings, count } = useFetchBookings();
 
-  if (isLoading) return <Spinner />;
   if (!bookings) {
     return <Empty resourceName="Bookings" />;
   }
+  if (isLoading) return <Spinner />;
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
